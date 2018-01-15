@@ -4,7 +4,7 @@ package com.izdep.app.model;
  * ResultURL Class which contains necessary information for each url element to
  * be displayed
  * 
- * @author offirgolan
+ * @author Istep Solutions
  * 
  */
 public class ResultURLModel implements Comparable<ResultURLModel>

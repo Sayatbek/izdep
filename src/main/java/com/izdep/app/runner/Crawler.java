@@ -655,14 +655,15 @@ public class Crawler implements Runnable {
             words = text.split("\\s+"); // split the string by white spaces to get individual words
             for (String word : words) {
                 word = word.toLowerCase(); // Lower case all words
-                word = word.replaceAll("[^A-Za-z0-9]", ""); // Remove punctuation
-                if (word.matches("[a-zA-Z0-9]+")) // If the word is letters and numbers only
+                word = word.replaceAll("[^\\p{IsAlphabetic}^\\p{IsDigit}]", ""); // Remove punctuation
+                if (word.matches("[\\p{IsAlphabetic}\\p{IsDigit}]+")) // If the word is letters and numbers only
                 {
                     // Add words to urls table
                     if (!wordInDB(word, TABLE_WORD)) {
                         // If the word is not in the table, create a new entry
                         insertWordInDB(word, urlIndex + "", TABLE_WORD);
                     } else {
+
                         // Else, update the current entry with the current urlIndex
                         urllist = getURLListFromDB(word, TABLE_WORD);
                         if (!urllist.contains(String.valueOf(urlIndex))) // Check to not add duplicates
