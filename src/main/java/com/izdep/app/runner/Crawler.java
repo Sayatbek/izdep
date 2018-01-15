@@ -801,8 +801,8 @@ public class Crawler implements Runnable {
      */
     public static Crawler createCrawler(String[] args) throws IOException {
         // Default Values
-        String domain = "cs.purdue.edu";
-        String root = "http://www.cs.purdue.edu/";
+        String domain = "qamshy.kz";
+        String root = "http://www.qamshy.kz/";
         int MaxURLs = 1000;
         boolean reset = true;
         ArrayList<String> urlList = new ArrayList<String>();
