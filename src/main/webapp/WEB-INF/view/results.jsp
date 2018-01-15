@@ -157,7 +157,7 @@
                     }
                     else
                     {
-                        title = i + "";
+                        title = i + "";//kl
                         %>
                         <img class=pageNumberImage src="../img/page_num_red.png">
                         <%
