@@ -49,7 +49,7 @@
    <div id="main">
 
 	<div class=topbar id=TopBar>
-		<a href="/"> <img src="/img/logoMini.png" alt="${sitename}"
+		<a href="/"> <img src="../img/logoMini.png" alt="${sitename}"
                                    width="156" height="38" border="0">
 		</a>
 		<form class="form-wrapper cf" method="post" name="search_frm"

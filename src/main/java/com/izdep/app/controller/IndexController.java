@@ -14,7 +14,7 @@ public class IndexController {
 
     @Value("${kaz.images}")
     String images;
-//as
+
     @Value("${kaz.request}")
     String request;
     @Value("${kaz.sitename}")
