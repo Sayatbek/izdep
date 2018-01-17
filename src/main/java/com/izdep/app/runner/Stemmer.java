@@ -4,6 +4,6 @@ public class Stemmer {
 
 
     public static void main(String [] args){
-        System.out.println("hello oooooo");
+        System.out.println("hello gggggg");
     }
 }
