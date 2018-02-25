@@ -13,7 +13,7 @@
 		<a href="javascript: void(0)" style="color: #fff">${search}</a> <a
 			href="imageIndex" style="margin-left: 10px;">${images}</a>
 	</div>
-ф
+
 	<div class="home">
 		<img src="img/logo.png" alt="${sitename}" width="618" height="147"
 			border="0">

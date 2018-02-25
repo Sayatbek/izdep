@@ -477,6 +477,9 @@ public class Crawler implements Runnable {
      * @throws SQLException
      * @throws IOException
      */
+
+    public static int counterForUrl = 0;
+
     public synchronized void extractDocumentURLs(Document doc)
             throws SQLException, IOException {
         Elements links;
@@ -488,6 +491,7 @@ public class Crawler implements Runnable {
         for (Element e : links) {
             // Get the absolute url
             String urlFound = e.attr("abs:href");
+
             urlFound = urlFound.trim();
             boolean found = urlInDB(urlFound, TABLE_URLS);
 
@@ -503,6 +507,7 @@ public class Crawler implements Runnable {
                 pstmt.setString(2, urlFound);
                 pstmt.executeUpdate();
                 pstmt.close();
+
             }
 
             /* For a url to be added to the DB it must be http, contain the domain,
@@ -517,8 +522,28 @@ public class Crawler implements Runnable {
                 // Save the counters to the properties file
                 setProperties();
             }
-        }
 
+            if (!found && isValidURL(urlFound) && counterForUrl < 100) {
+                insertURLInDB(urlFound, NextURLID, TABLE_URLS);
+                NextURLID++;
+                setProperties();
+                counterForUrl++;
+                extractDocumentURLs(parseURL(urlFound));
+            }
+        }
+    }
+
+    public static boolean isValidURL(String urlString)
+    {
+        try
+        {
+            URL url = new URL(urlString);
+            url.toURI();
+            return true;
+        } catch (Exception exception)
+        {
+            return false;
+        }
     }
 
     /**
