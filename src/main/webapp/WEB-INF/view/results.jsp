@@ -249,7 +249,7 @@
       %>
         </div>
 		<div class=footer>
-			<p>Istep Solutions &copy; ${sitename} 2018</p>
+			<p>Symbat Yergali Zhansulu &copy; ${sitename} 2018</p>
 		</div>
 </div>
 </footer>

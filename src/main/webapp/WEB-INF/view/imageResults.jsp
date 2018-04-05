@@ -121,7 +121,7 @@ $(document).ready(function() {
 <footer>
 <div id="footer">
       <div class="footer image-footer">
-         <p>Istep Solutions &copy; ${sitename} 2018</p>
+         <p>Symbat Yergali Zhansulu &copy; ${sitename} 2018</p>
       </div>
 </div>
 </footer>
