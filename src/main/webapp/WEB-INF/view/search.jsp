@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <title>${sitename}</title>
-<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="../css/style.css" type="text/css" />
 
 </head>
 <body onLoad="document.forms.search_frm.search_field.focus()">
@@ -13,7 +13,7 @@
 		<a href="javascript: void(0)" style="color: #fff">${search}</a> <a
 			href="imageIndex" style="margin-left: 10px;">${images}</a>
 	</div>
-ф
+
 	<div class="home">
 		<img src="img/logo.png" alt="${sitename}" width="618" height="147"
 			border="0">
@@ -27,5 +27,15 @@
 		</form>
 	</div>
 
+	<div id="footer">
+		<div class="footer">
+			<p>Symbat Yergali Zhansulu &copy; ${sitename} 2018</p>
+			<p style="float: right; margin-right: 30px;">
+				<a style="color: black;" href="mailto:yergali.zhakhan@gmail.com?Subject=Izdep%20Support" target="_top">Technical support</a>
+			</p>
+		</div>
+	</div>
+
 </body>
+
 </html>

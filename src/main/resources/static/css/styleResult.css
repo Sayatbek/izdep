@@ -113,13 +113,13 @@ img {
 
 .footer {
 	background-clip: border-box;
-   border-top-color: #EBEBEB;
-   border-top-style: solid;
-   border-top-width: 1px;
+	border-top-color: #EBEBEB;
+	border-top-style: solid;
+	border-top-width: 1px;
 	overflow-y: visible;
 	background: #f1f1f1;
 	background: -webkit-gradient(radial, 100 36, 0, 100 -40, 120, from(#fafafa),
-		to(#f1f1f1) ), #f1f1f1;
+	to(#f1f1f1) ), #f1f1f1;
 	border-bottom: 1px solid #666;
 	border-color: #e5e5e5;
 	height: 40px;
@@ -129,17 +129,18 @@ img {
 	z-index: 985;
 	bottom: 0;
 	left: 0px;
-   right: 0px;
+	right: 0px;
 	border-color: #e5e5e5;
-	margin-bottom: -15px;
+	position: fixed;
+	left: 0;
 }
 
 .image-footer {
 	background: white;
-	
 }
 
 .footer p {
+	color: black;
 	text-align: center;
 	font-color: grey;
 	font-size: 12px;
