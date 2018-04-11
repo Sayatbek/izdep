@@ -13,26 +13,14 @@ import java.util.List;
 
 public class ContentChecker {
 
-    public static void main(String[] args) throws IOException, SQLException {
-        String url = "http://www.qamshy.kz/";
-
-        if(checkContent(url)) {
-            System.out.println("This is kazakh web page");
-        }else {
-            System.out.println("This is not kazakh web page");
-        }
-    }
-
     public static boolean checkContent(String url) throws SQLException, IOException {
         DBHelper.openConnection(PropertyHelper.getProperties());
         List<String> allWords = DBHelper.getAllWords();
 
-        System.out.println("AllWords table last element " + allWords.size());
-
         String text;
         String[] words;
         Document mDocument = JsoupHelper.parseURL(url);
-        System.out.println("Extracting words from: " + url);
+        if(mDocument==null) return false;
         // Remove html white spaces
         mDocument.select(":containsOwn(\u00a0)").remove();
         text = mDocument.text();
@@ -53,10 +41,11 @@ public class ContentChecker {
             }
         }
 
-        System.out.println(numOfWords + "/" + numOfKazakhWords);
-        int onePercent = numOfWords/100;
-        int percentageOfKazakhWords = numOfKazakhWords/onePercent;
-        if(percentageOfKazakhWords>=65) {
+        if(numOfWords==0) {
+            return false;
+        }
+        int result = (numOfKazakhWords*100)/numOfWords;
+        if(result>=65) {
             return true;
         }else {
             return false;

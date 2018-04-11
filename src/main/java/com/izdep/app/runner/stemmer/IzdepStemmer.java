@@ -32,84 +32,8 @@ public class IzdepStemmer {
     private static final Pattern P = Pattern.compile("ь$");
     private static final Pattern NN = Pattern.compile("нн$");
 
-    private static Stack<String> chunksStack;
-
-    public static void main(String[] args) throws SQLException {
-
-        List<String> wordsList = new ArrayList<>();
-        wordsList.add("сөздерді");
-        wordsList.add("қазақстан");
-        wordsList.add("құтқарушымсың");
-        wordsList.add("балапаным");
-        wordsList.add("қолданушының");
-        wordsList.add("ойлаған");
-
-        wordsList.add("аударуымыз");
-        wordsList.add("айтқанмын");
-        wordsList.add("бағыңды");
-        wordsList.add("сына");
-        wordsList.add("жеңімпаз");
-
-
-        for(String w: wordsList) {
-            System.out.println("Word " + w);
-            System.out.println("Root " + stem(w));
-        }
-        String stemmer = stem("ойнамақ");
-        System.out.println("Porter stemmer result " + stemmer);
-//        Properties properties = PropertyHelper.getProperties();
-//        if(properties.getProperty(ApiConst.CRAWLER_RESET).equalsIgnoreCase("YES")) {
-//            DBHelper.createDB(properties);
-//        }
-        DBHelper.openConnection(PropertyHelper.getProperties());
-        List<String> words = DBHelper.fetchWordFromDB("қазақ");
-//        if(words!=null) {
-//            boolean success = true;
-//            int i = 0;
-//            while(success) {
-//                System.out.println("Processing " + i++);
-//                System.out.println("Stack size " + chunksStack.lastElement());
-//                if(words.contains(stemmer)) {
-//                    System.out.println("Success " + stemmer);
-//                    success = false;
-//                }else {
-//                    success = true;
-//                    stemmer = stemmer + chunksStack.pop();
-//                    System.out.println("Error: " + stemmer);
-//                }
-//            }
-//        }
-//        for(String word: words) {
-//            System.out.println(word);
-//        }
-
-//        wordProcessing(wordsList);
-    }
-
-    private static void wordProcessing(List<String> wordsList) {
-        Matcher m = RVRE.matcher(wordsList.get(0));
-        if(m.matches()) {
-            System.out.println("Hello World");
-            String pre = m.group(1);
-            String rv = m.group(2);
-            if(pre.matches(RVRE.toString())) {
-                System.out.println("PERFECTIVEGROUND");
-            }
-
-            if(RVRE.matcher(rv).matches()) {
-                System.out.println(rv);
-                System.out.println("RVRE");
-            }
-
-            if(pre.matches(ADJECTIVE.toString())) {
-                System.out.println("ADJECTIVE");
-            }
-        }
-    }
-
     public static String stem(String word) {
         int i = 0;
-        chunksStack = new Stack<>();
         word = word.toLowerCase();
         word = word.replace('ё', 'е');
         Matcher m = RVRE.matcher(word);

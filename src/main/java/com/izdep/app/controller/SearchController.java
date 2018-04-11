@@ -2,6 +2,8 @@ package com.izdep.app.controller;
 
 import com.izdep.app.model.ResultURLModel;
 import com.izdep.app.runner.Crawler;
+import com.izdep.app.runner.utils.ApiConst;
+import com.izdep.app.runner.utils.DBHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -73,22 +75,17 @@ public class SearchController {
             List<ResultURLModel> result = new ArrayList<ResultURLModel>();
 
             // Create a crawler with the opened connection
-            Crawler crawler = new Crawler(connection);
+            openConnection();
 
             // Get the urlList of each word
             for (String word : words) {
                 // Check to see if the search query word is in the DB
-                if (crawler.wordInDB(word, Crawler.TABLE_WORD)) {
+                if (DBHelper.checkWordInDB(connection, word, ApiConst.TABLE_WORDS)) {
                     // Get the urlList corresponding to the word
-                    String list = crawler.getURLListFromDB(word, Crawler.TABLE_WORD);
-                    List<Integer> temp = new ArrayList<Integer>();
-
-                    // Create a list of integers from the list
-                    for (String idStr : list.split(",")) {
-                        temp.add(Integer.parseInt(idStr));
-                    }
-
-                    urlIDs.add(temp);
+                    int word_id = DBHelper.getWordId(connection, word, ApiConst.TABLE_WORDS);
+                    List<Integer> list = DBHelper.getLinksListForWordID(connection, word_id);
+                    System.out.println("getLinksListForWordID " + list.size());
+                    urlIDs.add(list);
                 }
             }
 
@@ -101,7 +98,7 @@ public class SearchController {
                 // Retrieve information from DB for each urlID
                 for (int urlid : intersection) {
                     PreparedStatement pstmt = connection
-                            .prepareStatement("SELECT * FROM urls WHERE urlid = ?");
+                            .prepareStatement("SELECT * FROM " + ApiConst.TABLE_LINKS + " WHERE id = ?");
                     pstmt.setInt(1, urlid);
                     ResultSet r = pstmt.executeQuery();
                     r.next();
