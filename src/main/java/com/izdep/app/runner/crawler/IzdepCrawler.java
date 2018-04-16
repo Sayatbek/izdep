@@ -163,20 +163,16 @@ public class IzdepCrawler {
                 boolean wordExitstInImgWord = DBHelper.checkWordInWordsVsImages(word_id, ApiConst.TABLE_WORDS_VS_IMAGES);
                 if(!wordExitstInImgWord) {
                     if(!imagesList.isEmpty()) {
-                        urllist = imagesList.get(0).getId() + "";
-                        for (int i = 1; i < imagesList.size(); i++) {
-                            if(!urllist.contains(String.valueOf(imagesList.get(i).getId())))
-                                urllist = urllist + "," + imagesList.get(i).getId();
+                        for (int i = 0; i < imagesList.size(); i++) {
+                            DBHelper.insertWordToImageLinks(NextWordID, imagesList.get(i).getId(), ApiConst.TABLE_WORDS_VS_IMAGES);
                         }
-                        DBHelper.insertWordToImageLinks(NextWordID, urllist, ApiConst.TABLE_WORDS_VS_IMAGES);
                     }
                 }else {
-                    urllist = DBHelper.getURLListFromDB(word_id, ApiConst.TABLE_WORDS_VS_IMAGES);
-                    for (int i = 1; i < imagesList.size(); i++) {
-                        if(!urllist.contains(String.valueOf(imagesList.get(i).getId())))
-                            urllist = urllist + "," + imagesList.get(i).getId();
+                    if(!imagesList.isEmpty()) {
+                        for(Images image: imagesList) {
+                            DBHelper.insertWordToImageLinks(word_id, image.getId(), ApiConst.TABLE_WORDS_VS_IMAGES);
+                        }
                     }
-                    DBHelper.updateUrlListOfWord(urllist, word_id, ApiConst.TABLE_WORDS_VS_IMAGES);
                 }
             }
             NextWordID++;

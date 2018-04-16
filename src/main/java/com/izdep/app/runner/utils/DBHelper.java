@@ -25,7 +25,7 @@ public class DBHelper {
             " (word_id INT, link_id INT)";
 
     private static String INIT_TABLE_WORDS_VS_IMAGES = "CREATE TABLE " + ApiConst.TABLE_WORDS_VS_IMAGES +
-            " (word_id INT, image_id VARCHAR(20000) CHARACTER SET utf8 COLLATE utf8_general_ci)";
+            " (word_id INT, image_id INT)";
 
     private static Connection mConnection;
     private static PreparedStatement preparedStatement;
@@ -234,12 +234,12 @@ public class DBHelper {
         }
     }
 
-    public static void insertWordToImageLinks(int word_id, String urllist, String table) throws SQLException {
+    public static void insertWordToImageLinks(int word_id, int image_id, String table) throws SQLException {
         if(mConnection!=null) {
             preparedStatement = mConnection
                     .prepareStatement("INSERT INTO " + table + " VALUES (?, ?)");
             preparedStatement.setInt(1, word_id);
-            preparedStatement.setString(2, urllist);
+            preparedStatement.setInt(2, image_id);
             preparedStatement.executeUpdate();
             preparedStatement.close();
         }
@@ -256,26 +256,15 @@ public class DBHelper {
         }
     }
 
-    public static String getURLListFromDB(int word_id, String table) throws SQLException {
-        preparedStatement = mConnection
-                .prepareStatement("SELECT * FROM " + table + " WHERE word_id = ?");
-        preparedStatement.setInt(1, word_id);
-        ResultSet result = preparedStatement.executeQuery();
-        result.next();
-        //System.out.println("WORD " + word + ": " + result.getString(2));
-        String list = result.getString(2);
-        preparedStatement.close();
-        return list;
-    }
-
-    public static String getURLListFromDB(Connection connection, int word_id, String table) throws SQLException {
+    public static List<Integer> getURLListFromDB(Connection connection, int word_id, String table) throws SQLException {
+        List<Integer> list = new ArrayList<>();
         preparedStatement = connection
                 .prepareStatement("SELECT * FROM " + table + " WHERE word_id = ?");
         preparedStatement.setInt(1, word_id);
         ResultSet result = preparedStatement.executeQuery();
-        result.next();
-        //System.out.println("WORD " + word + ": " + result.getString(2));
-        String list = result.getString(2);
+        while(result.next()) {
+            list.add(result.getInt("image_id"));
+        }
         preparedStatement.close();
         return list;
     }
@@ -288,16 +277,6 @@ public class DBHelper {
         int id = result.getInt("id");
         preparedStatement.close();
         return id;
-    }
-
-    public static void updateUrlListOfWord(String urllist, int word_id, String table) throws SQLException {
-        if(mConnection!=null) {
-            preparedStatement = mConnection.prepareStatement("UPDATE " + table + " SET image_id = ? WHERE word_id=? ");
-            preparedStatement.setString(1, urllist);
-            preparedStatement.setInt(2, word_id);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        }
     }
 
 }

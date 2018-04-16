@@ -84,15 +84,7 @@ public class ImageSearchController
             {
                int word_id = DBHelper.getWordId(connection, word, ApiConst.TABLE_WORDS);
                // Get the urlList corresponding to the word
-               String list = DBHelper.getURLListFromDB(connection, word_id, ApiConst.TABLE_WORDS_VS_IMAGES);
-               List<Integer> temp = new ArrayList<Integer>();
-
-               // Create a list of integers from the list
-               for (String idStr : list.split(","))
-               {
-                  temp.add(Integer.parseInt(idStr));
-               }
-
+               List<Integer> temp = DBHelper.getURLListFromDB(connection, word_id, ApiConst.TABLE_WORDS_VS_IMAGES);
                urlIDs.add(temp);
             }
          }

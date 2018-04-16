@@ -84,7 +84,6 @@ public class SearchController {
                     // Get the urlList corresponding to the word
                     int word_id = DBHelper.getWordId(connection, word, ApiConst.TABLE_WORDS);
                     List<Integer> list = DBHelper.getLinksListForWordID(connection, word_id);
-                    System.out.println("getLinksListForWordID " + list.size());
                     urlIDs.add(list);
                 }
             }
