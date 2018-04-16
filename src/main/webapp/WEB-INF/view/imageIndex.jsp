@@ -27,5 +27,14 @@
 		</form>
 	</div>
 
+	<div id="footer">
+		<div class="footer">
+			<p>Symbat Yergali Zhansulu &copy; ${sitename} 2018</p>
+			<p style="float: right; margin-right: 30px;">
+				<a style="color: black;" href="mailto:yergali.zhakhan@gmail.com?Subject=Izdep%20Support" target="_top">Technical support</a>
+			</p>
+		</div>
+	</div>
+
 </body>
 </html>
