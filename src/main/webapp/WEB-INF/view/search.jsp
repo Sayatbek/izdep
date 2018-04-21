@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <title>${sitename}</title>
-<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="../css/style.css" type="text/css" />
 
 </head>
 <body onLoad="document.forms.search_frm.search_field.focus()">
@@ -27,5 +27,15 @@
 		</form>
 	</div>
 
+	<div id="footer">
+		<div class="footer">
+			<p>Symbat Yergali Zhansulu &copy; ${sitename} 2018</p>
+			<p style="float: right; margin-right: 30px;">
+				<a style="color: black;" href="mailto:yergali.zhakhan@gmail.com?Subject=Izdep%20Support" target="_top">Technical support</a>
+			</p>
+		</div>
+	</div>
+
 </body>
+
 </html>

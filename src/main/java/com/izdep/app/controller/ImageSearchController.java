@@ -2,6 +2,8 @@ package com.izdep.app.controller;
 
 import com.izdep.app.model.ResultURLModel;
 import com.izdep.app.runner.Crawler;
+import com.izdep.app.runner.utils.ApiConst;
+import com.izdep.app.runner.utils.DBHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -73,26 +75,16 @@ public class ImageSearchController
          String[] words = search.toLowerCase().split("\\s+");
          List<List<Integer>> urlIDs = new ArrayList<List<Integer>>();
          List<ResultURLModel> result = new ArrayList<ResultURLModel>();
-         
-         // Create a crawler with the opened connection
-         Crawler crawler = new Crawler(connection);
 
          // Get the urlList of each word
          for (String word : words)
          {
             // Check to see if the search query word is in the DB
-            if (crawler.wordInDB(word, Crawler.TABLE_IMGWORD))
+            if (DBHelper.checkWordInDB(connection, word, ApiConst.TABLE_WORDS))
             {
+               int word_id = DBHelper.getWordId(connection, word, ApiConst.TABLE_WORDS);
                // Get the urlList corresponding to the word
-               String list = crawler.getURLListFromDB(word, Crawler.TABLE_IMGWORD);
-               List<Integer> temp = new ArrayList<Integer>();
-
-               // Create a list of integers from the list
-               for (String idStr : list.split(","))
-               {
-                  temp.add(Integer.parseInt(idStr));
-               }
-
+               List<Integer> temp = DBHelper.getURLListFromDB(connection, word_id, ApiConst.TABLE_WORDS_VS_IMAGES);
                urlIDs.add(temp);
             }
          }
@@ -108,7 +100,7 @@ public class ImageSearchController
             for (int urlid : intersection)
             {
                PreparedStatement pstmt = connection
-                     .prepareStatement("SELECT * FROM images WHERE urlid = ?");
+                     .prepareStatement("SELECT * FROM " + ApiConst.TABLE_IMAGES + " WHERE id = ?");
                pstmt.setInt(1, urlid);
                ResultSet r = pstmt.executeQuery();
                r.next();

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class IndexController {
-
+//as
     @Value("${kaz.search}")
     String search;
 
