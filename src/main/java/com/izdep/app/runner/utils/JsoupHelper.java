@@ -1,6 +1,7 @@
 package com.izdep.app.runner.utils;
 
 import org.jsoup.Jsoup;
+import org.jsoup.helper.HttpConnection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,7 +20,7 @@ public class JsoupHelper {
 //        doc = Jsoup.parse(in, "UTF-8", url);
         doc = Jsoup.connect(url)
                 .ignoreHttpErrors(true)
-                .timeout(15000)
+                .timeout(3000)
                 .get();
 
         if (doc != null) {

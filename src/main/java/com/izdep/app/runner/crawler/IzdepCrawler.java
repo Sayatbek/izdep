@@ -1,6 +1,7 @@
 package com.izdep.app.runner.crawler;
 
 import com.izdep.app.runner.entities.Images;
+import com.izdep.app.runner.stemmer.IzdepStemmer;
 import com.izdep.app.runner.utils.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -99,6 +100,9 @@ public class IzdepCrawler {
 
                 if (!links.isEmpty())
                     PropertyHelper.setPropertyRootUrl(props, links.peek().toString());
+            } else {
+                Document document = JsoupHelper.parseURL(curLink);
+                getLinksFromURL(document, curLink);
             }
         }
     }
@@ -147,6 +151,7 @@ public class IzdepCrawler {
         words = text.split("\\s+"); // split the string by white spaces to get individual words
         for (String word:words) {
             word = word.toLowerCase();
+            word = IzdepStemmer.stem(word);
             word = word.replaceAll("[^\\p{IsAlphabetic}^\\p{IsDigit}]", ""); // Remove punctuation
             if (word.matches("[\\p{IsAlphabetic}\\p{IsDigit}]+")) { // If the word is letters and numbers only
                 boolean wordExists = DBHelper.checkWordInDB(word, ApiConst.TABLE_WORDS);
@@ -184,10 +189,10 @@ public class IzdepCrawler {
         System.out.println("Extracting links from: " + url);
         Elements localLinks = mDocument.select("a");
 
-        int amount = 5;
+//        int amount = 30;
 
         for(Element e: localLinks) {
-            if (amount-- == 0) break;
+//            if (amount-- == 0) break;
             String urlFound = e.attr("abs:href");
             urlFound = urlFound.trim();
 

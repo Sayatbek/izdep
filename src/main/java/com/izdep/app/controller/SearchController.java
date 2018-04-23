@@ -2,6 +2,9 @@ package com.izdep.app.controller;
 
 import com.izdep.app.model.ResultURLModel;
 import com.izdep.app.runner.Crawler;
+import com.izdep.app.runner.spell_checker.SpellChecker;
+import com.izdep.app.runner.spell_checker.entity.SpellCheckerResult;
+import com.izdep.app.runner.stemmer.IzdepStemmer;
 import com.izdep.app.runner.utils.ApiConst;
 import com.izdep.app.runner.utils.DBHelper;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,9 +80,13 @@ public class SearchController {
             // Create a crawler with the opened connection
             openConnection();
 
+            // Check search field with spell checker
+            SpellCheckerResult spellCheckerResult = SpellChecker.handleSearch(connection, words);
+
             // Get the urlList of each word
             for (String word : words) {
                 // Check to see if the search query word is in the DB
+                word = IzdepStemmer.stem(word);
                 if (DBHelper.checkWordInDB(connection, word, ApiConst.TABLE_WORDS)) {
                     // Get the urlList corresponding to the word
                     int word_id = DBHelper.getWordId(connection, word, ApiConst.TABLE_WORDS);
@@ -163,12 +170,17 @@ public class SearchController {
                 }
             }
 
+            String spell = "";
+            if(!spellCheckerResult.isCorrect()) {
+                spell = spellCheckerResult.getResult();
+            }
             /*
              * Add resultList, original search query, and the update page number
              * to the request
              */
             request.setAttribute("query", search);
             request.setAttribute("resultList", resultList);
+            request.setAttribute("spell_checker", spell);
             request.setAttribute("pageNum", pageNum);
 
             connection.close();

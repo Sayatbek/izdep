@@ -2,6 +2,7 @@ package com.izdep.app.runner.utils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -86,6 +87,22 @@ public class DBHelper {
             }
             return wordsList;
         }else {
+            return null;
+        }
+    }
+
+    public static HashMap getAllWords(Connection connection, String table) {
+        HashMap<String, Integer> nWords = new HashMap<String, Integer>();
+        try {
+            String query = "SELECT * FROM " + table;
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet mResultSet = preparedStatement.executeQuery(query);
+            while(mResultSet.next()) {
+                nWords.put(mResultSet.getString("name"), 0);
+            }
+            return nWords;
+        }catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
