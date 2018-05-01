@@ -5,6 +5,7 @@
    int pageNum = (Integer) request.getAttribute("pageNum");
    List<ArrayList<String>> result = (List<ArrayList<String>>) request
    .getAttribute("resultList");
+   String spellChecker = (String) request.getAttribute("spell_checker");
    int maxPages = ((int) result.size() / 10) + 1;
 %>
 <!DOCTYPE html>
@@ -79,6 +80,25 @@ $(document).ready(function() {
 
 
    <div class="results image-results">
+      <%
+         if(!spellChecker.trim().equals("")) {
+      %>
+      <form id="sp_id" method="post" name="search_frm"
+            action="/web/search">
+         <input type="hidden" value="<%=spellChecker.toString()%>" name="search_field"
+                id="search_field" required>
+         <input type="hidden" name="page" value="1">
+         <h5>
+            <span style="color: red;">Возможно, вы имели ввиду </span>
+            <a href="#" onclick="document.getElementById('sp_id').submit();">
+               <%=spellChecker.toString()%>
+            </a>
+         </h5>
+      </form>
+      <%
+         }
+      %>
+
       <%
       // If there are no results found
          if (result != null)

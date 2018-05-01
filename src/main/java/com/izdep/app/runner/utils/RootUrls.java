@@ -1,11 +1,28 @@
 package com.izdep.app.runner.utils;
 
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 public class RootUrls {
+
+//    public static void main(String[] args) throws IOException {
+//        Queue<String> queue = getRootList();
+//        Document document = null;
+//        for (String s: queue) {
+//            System.out.print("URL: " + s);
+//            document = JsoupHelper.parseURL(s);
+//            if(document!=null) {
+//                System.out.println(" is OK");
+//            }else {
+//                System.out.println(" ERROR");
+//            }
+//        }
+//    }
 
     public static Queue<String> getRootList() {
         Queue<String> urlList = new LinkedList<>();

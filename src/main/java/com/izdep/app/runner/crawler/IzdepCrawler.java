@@ -88,9 +88,11 @@ public class IzdepCrawler {
             boolean urlExists = DBHelper.checkUrlInDB(curLink, ApiConst.TABLE_LINKS);
             if(ContentChecker.checkContent(curLink) && !urlExists) {
 //            if( !urlExists) {
+                Document document = JsoupHelper.parseURL(curLink);
+                if(document==null)
+                    continue;
                 int id = Integer.parseInt(props.getProperty(ApiConst.CRAWLER_NEXT_URL_ID));
                 DBHelper.insertURLInDB(id ,curLink, JsoupHelper.getTitleOfUrl(curLink), JsoupHelper.getDescriptionOfUrl(curLink));
-                Document document = JsoupHelper.parseURL(curLink);
                 List<Images> imagesList = getImageFromLink(props, document, curLink);
 
                 getWordsFromUrl(props, document, imagesList, curLink);
@@ -100,10 +102,11 @@ public class IzdepCrawler {
 
                 if (!links.isEmpty())
                     PropertyHelper.setPropertyRootUrl(props, links.peek().toString());
-            } else {
-                Document document = JsoupHelper.parseURL(curLink);
-                getLinksFromURL(document, curLink);
             }
+//            else {
+//                Document document = JsoupHelper.parseURL(curLink);
+//                getLinksFromURL(document, curLink);
+//            }
         }
     }
 
@@ -188,11 +191,9 @@ public class IzdepCrawler {
     private static void getLinksFromURL(Document mDocument, String url) throws SQLException, IOException {
         System.out.println("Extracting links from: " + url);
         Elements localLinks = mDocument.select("a");
-
-//        int amount = 30;
-
+        int amount = 15;
         for(Element e: localLinks) {
-//            if (amount-- == 0) break;
+            if (amount-- == 0) break;
             String urlFound = e.attr("abs:href");
             urlFound = urlFound.trim();
 

@@ -2,6 +2,8 @@ package com.izdep.app.controller;
 
 import com.izdep.app.model.ResultURLModel;
 import com.izdep.app.runner.Crawler;
+import com.izdep.app.runner.spell_checker.SpellChecker;
+import com.izdep.app.runner.spell_checker.entity.SpellCheckerResult;
 import com.izdep.app.runner.utils.ApiConst;
 import com.izdep.app.runner.utils.DBHelper;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,11 +72,13 @@ public class ImageSearchController
 
          // Open database connection
          openConnection();
-         
+
          // Split the search query by words
          String[] words = search.toLowerCase().split("\\s+");
          List<List<Integer>> urlIDs = new ArrayList<List<Integer>>();
          List<ResultURLModel> result = new ArrayList<ResultURLModel>();
+
+         SpellCheckerResult spellCheckerResult = SpellChecker.handleSearch(connection, words);
 
          // Get the urlList of each word
          for (String word : words)
@@ -132,12 +136,17 @@ public class ImageSearchController
             }
          }
 
+         String spell = "";
+         if(!spellCheckerResult.isCorrect()) {
+            spell = spellCheckerResult.getResult();
+         }
          /* 
           * Add resultList, original search query, and the update page number 
           * to the request
           */
          request.setAttribute("query", search);
          request.setAttribute("resultList", resultList);
+         request.setAttribute("spell_checker", spell);
          request.setAttribute("pageNum", pageNum);
 
          connection.close();

@@ -10,37 +10,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 public class JsoupHelper {
 
     public static Document parseURL(String url) throws IOException {
-//        InputStream in = null;
-        Document doc = null;
-//        in = new URL(url).openStream();
-//        doc = Jsoup.parse(in, "UTF-8", url);
-        doc = Jsoup.connect(url)
-                .ignoreHttpErrors(true)
-                .timeout(3000)
-                .get();
-
-        if (doc != null) {
+        if(isActiveUrl(url)) {
+            Document doc = null;
+            doc = Jsoup.connect(url)
+                    .ignoreHttpErrors(true)
+                    .timeout(0)
+                    .get();
             return doc;
+        }else {
+            return null;
         }
-        return null;
-//        try {
-//            in = new URL(url).openStream();
-//            doc = Jsoup.parse(in, "UTF-8", url);
-//        } catch (Exception e) {
-//            System.out.println(url);
-//            System.out.println("Could Not Obtain Document...");
-//            System.out.println("Skipped.");
-//            System.out.println("-------------------------------------------");
-//            doc = null;
-//        } finally {
-//            if (in != null)
-//                in.close();
-//        }
-//        return doc;
+    }
+
+    public static boolean isActiveUrl(String url) {
+        try {
+            HttpURLConnection.setFollowRedirects(false);
+            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+            con.setRequestMethod("HEAD");
+
+            con.setConnectTimeout(7000);
+            con.setReadTimeout(10000);
+
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        } catch (java.net.SocketTimeoutException e) {
+            return false;
+        } catch (java.io.IOException e) {
+            return false;
+        }
     }
 
     public static boolean imageExists(String url) {
@@ -66,8 +67,12 @@ public class JsoupHelper {
 
     public static String getTitleOfUrl(String url) throws IOException {
         Document mDocument = parseURL(url);
+        int maxLength = 200;
         if(mDocument!=null && mDocument.title()!=null) {
-            return mDocument.title();
+            if(mDocument.title().length()>200)
+                return mDocument.title().substring(0, maxLength);
+            else
+                return mDocument.title();
         }else {
             return "";
         }
