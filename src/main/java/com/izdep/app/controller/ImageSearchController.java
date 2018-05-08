@@ -16,10 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Servlet implementation class Search
@@ -75,7 +72,7 @@ public class ImageSearchController
 
          // Split the search query by words
          String[] words = search.toLowerCase().split("\\s+");
-         List<List<Integer>> urlIDs = new ArrayList<List<Integer>>();
+         List<Integer> urlIDs = new ArrayList<Integer>();
          List<ResultURLModel> result = new ArrayList<ResultURLModel>();
 
          SpellCheckerResult spellCheckerResult = SpellChecker.handleSearch(connection, words);
@@ -89,19 +86,21 @@ public class ImageSearchController
                int word_id = DBHelper.getWordId(connection, word, ApiConst.TABLE_WORDS);
                // Get the urlList corresponding to the word
                List<Integer> temp = DBHelper.getURLListFromDB(connection, word_id, ApiConst.TABLE_WORDS_VS_IMAGES);
-               urlIDs.add(temp);
+               urlIDs.addAll(temp);
             }
          }
 
          if (!urlIDs.isEmpty())
          {
             // Get the intersection of the urlIDs
-            List<Integer> intersection = urlIDs.get(0);
-            for (List<Integer> list : urlIDs)
-               intersection.retainAll(list);
+//            List<Integer> intersection = urlIDs.get(0);
+//            for (List<Integer> list : urlIDs)
+//               intersection.retainAll(list);
+
+            List<Integer> newListWithUniqueElements = new ArrayList<Integer>(new HashSet<Integer>(urlIDs));
 
             // Retrieve information from DB for each urlID
-            for (int urlid : intersection)
+            for (int urlid : newListWithUniqueElements)
             {
                PreparedStatement pstmt = connection
                      .prepareStatement("SELECT * FROM " + ApiConst.TABLE_IMAGES + " WHERE id = ?");

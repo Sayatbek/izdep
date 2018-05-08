@@ -17,10 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Servlet implementation class Search
@@ -74,7 +71,7 @@ public class SearchController {
 
             // Split the search query by words
             String[] words = search.toLowerCase().split("\\s+");
-            List<List<Integer>> urlIDs = new ArrayList<List<Integer>>();
+            List<Integer> urlIDs = new ArrayList<>();
             List<ResultURLModel> result = new ArrayList<ResultURLModel>();
 
             // Create a crawler with the opened connection
@@ -91,18 +88,20 @@ public class SearchController {
                     // Get the urlList corresponding to the word
                     int word_id = DBHelper.getWordId(connection, word, ApiConst.TABLE_WORDS);
                     List<Integer> list = DBHelper.getLinksListForWordID(connection, word_id);
-                    urlIDs.add(list);
+                    urlIDs.addAll(list);
                 }
             }
 
             if (!urlIDs.isEmpty()) {
                 // Get the intersection of the urlIDs
-                List<Integer> intersection = urlIDs.get(0);
-                for (List<Integer> list : urlIDs)
-                    intersection.retainAll(list);
+//                List<Integer> intersection = urlIDs.get(0);
+//                for (List<Integer> list : urlIDs)
+//                    intersection.retainAll(list);
+
+                List<Integer> newListWithUniqueElements = new ArrayList<Integer>(new HashSet<Integer>(urlIDs));
 
                 // Retrieve information from DB for each urlID
-                for (int urlid : intersection) {
+                for (int urlid : newListWithUniqueElements) {
                     PreparedStatement pstmt = connection
                             .prepareStatement("SELECT * FROM " + ApiConst.TABLE_LINKS + " WHERE id = ?");
                     pstmt.setInt(1, urlid);
