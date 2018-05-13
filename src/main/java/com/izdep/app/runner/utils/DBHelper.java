@@ -32,15 +32,15 @@ public class DBHelper {
     private static PreparedStatement preparedStatement;
 
     public static Connection openConnection(Properties props) throws SQLException {
-        String drivers = props.getProperty(ApiConst.JDBC_DRIVERS);
+        String drivers = "com.mysql.jdbc.Driver";
         if(drivers!=null)
             System.setProperty(ApiConst.JDBC_DRIVERS, drivers);
 
-        String url = props.getProperty(ApiConst.JDBC_URL);
-        String password = props.getProperty(ApiConst.JDBC_PASSWORD);
-        String username = props.getProperty(ApiConst.JDBC_USER);
+        String url = System.getProperty("JDBC_CONNECTION_STRING");
+        if(url==null)
+            url = "jdbc:mysql://aatms6gf0sjvoh.cycarrqqfvjn.eu-central-1.rds.amazonaws.com:3306/izdep?useUnicode=yes&characterEncoding=UTF-8&user=root&password=salemALEM*11";
 
-        mConnection = DriverManager.getConnection(url, username, password);
+        mConnection = DriverManager.getConnection(url);
 
         return mConnection;
     }

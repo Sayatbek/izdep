@@ -165,19 +165,15 @@ public class ImageSearchController
     * @throws IOException
     * @throws ClassNotFoundException
     */
-   @Value("${jdbc.url}")
-   String url;
-   @Value("${jdbc.username}")
-   String username;
-   @Value("${jdbc.password}")
-   String password;
-   public void openConnection() throws SQLException, IOException,
-         ClassNotFoundException
-   {
 
+   public void openConnection() throws SQLException, IOException,
+         ClassNotFoundException {
       String driver = "com.mysql.jdbc.Driver";
+      String url = System.getProperty("JDBC_CONNECTION_STRING");
+      if(url==null)
+         url = "jdbc:mysql://aatms6gf0sjvoh.cycarrqqfvjn.eu-central-1.rds.amazonaws.com:3306/izdep?useUnicode=yes&characterEncoding=UTF-8&user=root&password=salemALEM*11";
 
       Class.forName(driver);
-      connection = DriverManager.getConnection(url, username, password);
+      connection = DriverManager.getConnection(url);
    }
 }

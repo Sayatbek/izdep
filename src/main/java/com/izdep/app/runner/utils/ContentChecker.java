@@ -41,15 +41,16 @@ public class ContentChecker {
             }
         }
 
-        if(numOfWords==0) {
+        if(numOfKazakhWords==0) {
             return false;
         }
-        int result = (numOfKazakhWords*100)/numOfWords;
-        if(result>=65) {
-            return true;
-        }else {
-            return false;
-        }
+        return true;
+//        int result = (numOfKazakhWords*100)/numOfWords;
+//        if(result>=65) {
+//            return true;
+//        }else {
+//            return false;
+//        }
 
     }
 

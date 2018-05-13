@@ -77,11 +77,12 @@ public class IzdepCrawler {
     }
 
     private static void crawl(Properties props) throws IOException, SQLException {
-
+        DBHelper.insertWordInDB(0, "ізім-ғайым", ApiConst.TABLE_WORDS);
+        DBHelper.insertWordInDB(1, "Люди", ApiConst.TABLE_WORDS);
+        DBHelper.insertWordInDB(2, "english", ApiConst.TABLE_WORDS);
         while (!links.isEmpty()) {
             String curLink = links.remove().toString();
             String mainPart = getLink(curLink);
-//            System.out.println(mainPart + " mainPart to add HashMap for checking existance");
             if (mostPopularLinks.containsKey(mainPart) && mostPopularLinks.get(mainPart) == 10) continue;
             if (!mostPopularLinks.containsKey(mainPart)) mostPopularLinks.put(mainPart, 0);
             else mostPopularLinks.put(mainPart, mostPopularLinks.get(mainPart) + 1);
